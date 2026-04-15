@@ -1,0 +1,29 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from config import settings
+from database import engine, Base
+from routers import auth, users, workout, nutrition
+
+# Create all tables on startup
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="Fitness Coach API", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.allowed_origins.split(","),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(auth.router)
+app.include_router(users.router)
+app.include_router(workout.router)
+app.include_router(nutrition.router)
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
