@@ -60,6 +60,10 @@ export const api = {
     request(`/workout/${planId}/email`, { method: "POST", body: JSON.stringify({ email: email || null }) }),
   emailMealPlan: (planId: number, email?: string) =>
     request(`/nutrition/${planId}/email`, { method: "POST", body: JSON.stringify({ email: email || null }) }),
+
+  // Admin
+  adminListUsers: () => request<AdminUserSummary[]>("/admin/users"),
+  adminGetUser: (userId: number) => request<AdminUserDetail>(`/admin/users/${userId}`),
 };
 
 export interface UserProfile {
@@ -95,4 +99,39 @@ export interface MealPlan {
   fat_g?: number;
   plan_data: Record<string, unknown>;
   created_at: string;
+}
+
+export interface AdminUserSummary {
+  id: number;
+  email: string;
+  full_name: string;
+  age?: number;
+  weight_kg?: number;
+  fitness_goal?: string;
+  activity_level?: string;
+  created_at: string;
+  workout_count: number;
+  meal_count: number;
+}
+
+export interface AdminUserDetail extends AdminUserSummary {
+  height_cm?: number;
+  gender?: string;
+  dietary_restrictions?: string;
+  workouts: {
+    id: number;
+    title: string;
+    duration_weeks: number;
+    sessions_per_week: number;
+    created_at: string;
+  }[];
+  meals: {
+    id: number;
+    title: string;
+    daily_calories?: number;
+    protein_g?: number;
+    carbs_g?: number;
+    fat_g?: number;
+    created_at: string;
+  }[];
 }

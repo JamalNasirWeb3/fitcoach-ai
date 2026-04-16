@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 from database import engine, Base
-from routers import auth, users, workout, nutrition
+from routers import auth, users, workout, nutrition, admin
 
 # Create all tables on startup
 Base.metadata.create_all(bind=engine)
@@ -22,6 +22,7 @@ app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(workout.router)
 app.include_router(nutrition.router)
+app.include_router(admin.router)
 
 
 @app.get("/health")

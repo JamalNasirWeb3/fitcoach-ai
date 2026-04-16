@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     allowed_origins: str = "http://localhost:3000"  # comma-separated list
     gmail_user: str
     gmail_app_password: str
+    admin_email: str = ""  # comma-separated list of admin emails
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24  # 1 day
 

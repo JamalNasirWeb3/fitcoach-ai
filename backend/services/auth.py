@@ -9,6 +9,8 @@ from config import settings
 from database import get_db
 from models.user import User
 
+
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
@@ -46,3 +48,10 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     if user is None:
         raise credentials_exception
     return user
+
+
+def get_admin_user(current_user: User = Depends(get_current_user)) -> User:
+    admin_emails = [e.strip() for e in settings.admin_email.split(",") if e.strip()]
+    if current_user.email not in admin_emails:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
+    return current_user
