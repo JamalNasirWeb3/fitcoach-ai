@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 
@@ -28,8 +28,32 @@ export default function OnboardingPage() {
     fitness_goal: "",
     dietary_restrictions: "",
   });
+  const [isEdit, setIsEdit] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) { router.push("/login"); return; }
+
+    api.getMe()
+      .then((user) => {
+        const hasProfile = !!(user.fitness_goal && user.weight_kg);
+        setIsEdit(hasProfile);
+        setForm({
+          age: user.age?.toString() ?? "",
+          weight_kg: user.weight_kg?.toString() ?? "",
+          height_cm: user.height_cm?.toString() ?? "",
+          gender: user.gender ?? "",
+          activity_level: user.activity_level ?? "",
+          fitness_goal: user.fitness_goal ?? "",
+          dietary_restrictions: user.dietary_restrictions ?? "",
+        });
+      })
+      .catch(() => router.push("/login"))
+      .finally(() => setFetching(false));
+  }, [router]);
 
   function set(field: string, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -57,11 +81,15 @@ export default function OnboardingPage() {
     }
   }
 
+  if (fetching) return <div className="min-h-screen flex items-center justify-center bg-gray-50">Loading...</div>;
+
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-lg space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Set Up Your Profile</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            {isEdit ? "Edit Your Profile" : "Set Up Your Profile"}
+          </h1>
           <p className="text-gray-500 text-sm mt-1">This helps us personalize your plans.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -131,10 +159,19 @@ export default function OnboardingPage() {
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button type="submit" disabled={loading || !form.fitness_goal}
-            className="w-full bg-emerald-600 text-white py-2 rounded-lg font-semibold hover:bg-emerald-700 disabled:opacity-50 transition">
-            {loading ? "Saving..." : "Continue to Dashboard"}
-          </button>
+
+          <div className="flex gap-3">
+            {isEdit && (
+              <button type="button" onClick={() => router.push("/dashboard")}
+                className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-50 transition">
+                Cancel
+              </button>
+            )}
+            <button type="submit" disabled={loading || !form.fitness_goal}
+              className="flex-1 bg-emerald-600 text-white py-2 rounded-lg font-semibold hover:bg-emerald-700 disabled:opacity-50 transition">
+              {loading ? "Saving..." : isEdit ? "Save Changes" : "Continue to Dashboard"}
+            </button>
+          </div>
         </form>
       </div>
     </main>

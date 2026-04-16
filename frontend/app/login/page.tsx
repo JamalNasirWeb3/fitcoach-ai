@@ -18,7 +18,12 @@ export default function LoginPage() {
     try {
       const { access_token } = await api.login(email, password);
       localStorage.setItem("token", access_token);
-      router.push("/dashboard");
+      const user = await api.getMe();
+      if (!user.fitness_goal || !user.weight_kg) {
+        router.push("/onboarding");
+      } else {
+        router.push("/dashboard");
+      }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {

@@ -17,8 +17,8 @@ export default function AdminPage() {
     api.adminListUsers()
       .then(setUsers)
       .catch((err: Error) => {
-        if (err.message.includes("401")) { router.push("/login"); return; }
-        setError(err.message.includes("403") ? "Access denied. Admin only." : "Failed to load users.");
+        if (err.message.includes("Could not validate credentials")) { router.push("/login"); return; }
+        setError(err.message);
       })
       .finally(() => setLoading(false));
   }, [router]);

@@ -34,6 +34,7 @@ export default function DashboardPage() {
         <span className="text-xl font-bold text-emerald-700">FitCoach AI</span>
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-600">{user?.full_name}</span>
+          <Link href="/onboarding" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition">Edit Profile</Link>
           <button onClick={logout} className="text-sm text-gray-500 hover:text-red-500 transition">Logout</button>
         </div>
       </nav>
