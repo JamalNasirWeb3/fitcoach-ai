@@ -51,7 +51,8 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+        {/* Desktop table */}
+        <div className="hidden md:block bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-800 text-left text-xs text-gray-500 uppercase tracking-wider">
@@ -97,10 +98,7 @@ export default function AdminPage() {
                     {new Date(user.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4">
-                    <Link
-                      href={`/admin/users/${user.id}`}
-                      className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition"
-                    >
+                    <Link href={`/admin/users/${user.id}`} className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition">
                       View →
                     </Link>
                   </td>
@@ -111,6 +109,36 @@ export default function AdminPage() {
           {users.length === 0 && (
             <p className="text-center text-gray-600 py-12">No users registered yet.</p>
           )}
+        </div>
+
+        {/* Mobile cards */}
+        <div className="md:hidden space-y-3">
+          {users.length === 0 && (
+            <p className="text-center text-gray-600 py-12">No users registered yet.</p>
+          )}
+          {users.map((user) => (
+            <div key={user.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <p className="font-semibold text-white">{user.full_name}</p>
+                  <p className="text-xs text-gray-400">{user.email}</p>
+                </div>
+                <Link href={`/admin/users/${user.id}`} className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition">
+                  View →
+                </Link>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {user.fitness_goal && (
+                  <span className="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full capitalize">
+                    {user.fitness_goal.replace(/_/g, " ")}
+                  </span>
+                )}
+                <span className="text-xs text-gray-500">{user.workout_count} workouts</span>
+                <span className="text-xs text-gray-500">{user.meal_count} meals</span>
+                <span className="text-xs text-gray-600">{new Date(user.created_at).toLocaleDateString()}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </main>

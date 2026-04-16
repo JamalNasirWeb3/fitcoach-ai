@@ -30,12 +30,12 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
-        <span className="text-xl font-bold text-emerald-700">FitCoach AI</span>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-600">{user?.full_name}</span>
-          <Link href="/onboarding" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition">Edit Profile</Link>
-          <button onClick={logout} className="text-sm text-gray-500 hover:text-red-500 transition">Logout</button>
+      <nav className="bg-white shadow-sm px-4 sm:px-6 py-4 flex justify-between items-center gap-3">
+        <span className="text-lg sm:text-xl font-bold text-emerald-700 shrink-0">FitCoach AI</span>
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          <span className="text-sm text-gray-600 truncate hidden sm:block">{user?.full_name}</span>
+          <Link href="/onboarding" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition shrink-0">Edit Profile</Link>
+          <button onClick={logout} className="text-sm text-gray-500 hover:text-red-500 transition shrink-0">Logout</button>
         </div>
       </nav>
 

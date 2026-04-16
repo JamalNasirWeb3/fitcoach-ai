@@ -44,11 +44,11 @@ export default function MealPlanPage() {
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="max-w-3xl mx-auto p-6 space-y-6">
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
           <div>
             <Link href="/dashboard" className="text-sm text-blue-600 hover:underline">← Dashboard</Link>
             <h1 className="text-2xl font-bold text-gray-800 mt-1">{plan.title}</h1>
-            <div className="flex gap-4 text-sm text-gray-500 mt-1">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mt-1">
               <span>{plan.daily_calories} kcal/day</span>
               <span>Protein: {plan.protein_g}g</span>
               <span>Carbs: {plan.carbs_g}g</span>
@@ -56,7 +56,7 @@ export default function MealPlanPage() {
             </div>
           </div>
           <button onClick={handleEmail} disabled={sending || sent}
-            className="mt-6 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 transition">
+            className="sm:mt-6 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 transition w-full sm:w-auto">
             {sent ? "Sent!" : sending ? "Sending..." : "Email PDF"}
           </button>
         </div>

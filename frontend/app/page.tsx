@@ -50,7 +50,7 @@ export default function Home() {
     <main className="min-h-screen bg-gray-950 text-white">
 
       {/* Nav */}
-      <nav className="flex justify-between items-center px-8 py-5 max-w-6xl mx-auto">
+      <nav className="flex justify-between items-center px-4 sm:px-8 py-5 max-w-6xl mx-auto">
         <span className="text-2xl font-black text-emerald-400 tracking-tight">FitCoach AI</span>
         <div className="flex gap-3">
           <Link href="/login" className="text-gray-300 hover:text-white px-4 py-2 text-sm transition">Log In</Link>
@@ -65,7 +65,7 @@ export default function Home() {
         <span className="inline-block bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase">
           Powered by Claude AI
         </span>
-        <h1 className="text-6xl font-black leading-tight mb-6">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight mb-6">
           Your Personal<br />
           <span className="text-emerald-400">AI Fitness Coach</span>
         </h1>
