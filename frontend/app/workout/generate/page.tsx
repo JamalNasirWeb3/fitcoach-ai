@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { api } from "@/lib/api";
+import { getWorkoutImages, Gender } from "@/lib/images";
 
 export default function GenerateWorkoutPage() {
   const router = useRouter();
@@ -12,6 +13,11 @@ export default function GenerateWorkoutPage() {
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [gender, setGender] = useState<Gender>(null);
+
+  useEffect(() => {
+    api.getMe().then((u) => setGender(u.gender as Gender)).catch(() => {});
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,14 +37,16 @@ export default function GenerateWorkoutPage() {
     }
   }
 
+  const imgs = getWorkoutImages(gender);
+
   return (
     <main className="min-h-screen bg-gray-950 text-white">
 
       {/* Header image */}
       <div className="relative h-56 overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=1400&q=80&fit=crop&auto=format"
-          alt="Workout equipment"
+          src={imgs.generate}
+          alt="Workout"
           fill
           className="object-cover object-center"
           priority

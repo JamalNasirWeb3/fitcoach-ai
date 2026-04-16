@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { api, WorkoutPlan } from "@/lib/api";
+import { getWorkoutImages, Gender } from "@/lib/images";
 
 interface Exercise { name: string; sets: number; reps: string; rest_seconds: number; notes?: string; }
 interface Session { day: string; focus: string; exercises: Exercise[]; }
@@ -16,6 +17,7 @@ export default function WorkoutPlanPage() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [gender, setGender] = useState<Gender>(null);
 
   async function handleEmail() {
     setSending(true);
@@ -28,6 +30,7 @@ export default function WorkoutPlanPage() {
   }
 
   useEffect(() => {
+    api.getMe().then((u) => setGender(u.gender as Gender)).catch(() => {});
     api.listWorkouts()
       .then((plans) => {
         const found = plans.find((p) => p.id === Number(id));
@@ -46,6 +49,7 @@ export default function WorkoutPlanPage() {
   if (!plan) return null;
 
   const planData = plan.plan_data as { weeks: Week[] };
+  const imgs = getWorkoutImages(gender);
 
   return (
     <main className="min-h-screen bg-gray-950 text-white">
@@ -53,8 +57,8 @@ export default function WorkoutPlanPage() {
       {/* Header image */}
       <div className="relative h-52 overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1400&q=80&fit=crop&auto=format"
-          alt="Gym"
+          src={imgs.detail}
+          alt="Workout"
           fill
           className="object-cover"
           priority

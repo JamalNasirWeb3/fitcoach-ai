@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { api, UserProfile, WorkoutPlan, MealPlan } from "@/lib/api";
+import { getWorkoutImages } from "@/lib/images";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -27,6 +28,8 @@ export default function DashboardPage() {
     router.push("/");
   }
 
+  const imgs = getWorkoutImages(user?.gender as never);
+
   if (loading) return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center">
       <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
@@ -49,7 +52,7 @@ export default function DashboardPage() {
       {/* Hero banner */}
       <div className="relative h-48 overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1400&q=80&fit=crop&auto=format"
+          src={imgs.banner}
           alt="Training"
           fill
           className="object-cover object-center"
@@ -75,7 +78,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Link href="/workout/generate" className="relative rounded-2xl overflow-hidden group h-36">
             <Image
-              src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80&fit=crop&auto=format"
+              src={imgs.card}
               alt="Workout"
               fill
               className="object-cover group-hover:scale-105 transition duration-500"
